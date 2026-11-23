@@ -1,8 +1,11 @@
-import tailwindcss from '@tailwindcss/vite';
-import { defineConfig } from 'astro/config';
+import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "astro/config";
 
 export default defineConfig({
-  output: 'static',
+  site: "https://golddigi.github.io",
+  base: "/shivom-designs",
+
+  output: "static",
   vite: {
     plugins: [tailwindcss()],
   },
