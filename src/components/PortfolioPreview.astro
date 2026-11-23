@@ -1,0 +1,15 @@
+---
+import { sitePath } from '../lib/paths.js';
+import StudioImage from './StudioImage.astro';
+
+const { project, showMeta = true } = Astro.props;
+const { data, id } = project;
+---
+
+<a class="project-card group block" href={sitePath(`past-projects/${id}/`)}>
+  <StudioImage name={data.img} alt="" />
+  <div class="project-card-caption">
+    <h3 class="display project-name">{data.title}</h3>
+    {showMeta && <p class="project-category">{data.category}</p>}
+  </div>
+</a>

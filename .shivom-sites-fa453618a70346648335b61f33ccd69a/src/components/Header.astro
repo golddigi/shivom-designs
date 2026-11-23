@@ -1,0 +1,33 @@
+---
+import { sitePath } from '../lib/paths.js';
+
+const { sticky = false } = Astro.props;
+const currentPath = Astro.url.pathname.replace(/\/$/, '');
+const links = [
+  { label: 'Home', path: '' },
+  { label: 'About', path: 'about/' },
+  { label: 'Past Projects', path: 'past-projects/' },
+  { label: 'Contact', path: 'contact/' },
+].map(({ label, path }) => {
+  const href = sitePath(path);
+  const exact = currentPath === href.replace(/\/$/, '');
+  return { label, href, exact, current: exact || (path && currentPath.startsWith(href)) };
+});
+---
+
+<header class:list={['site-header', { 'site-header-sticky': sticky }]} data-site-header>
+  <div class="header-inner">
+    <a class="wordmark header-brand" href={sitePath()} aria-label="Shivom Design home">
+      <span>Shivom</span><small>Design Studio</small>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-navigation" data-menu-toggle hidden>
+      <span>Menu</span><span class="menu-bars" aria-hidden="true"></span>
+    </button>
+    <nav class="site-nav" id="site-navigation" aria-label="Main navigation">
+      {links.map(({ label, href, exact, current }) => (
+        <a href={href} class:list={{ 'nav-current': current }} aria-current={exact ? 'page' : undefined}>{label}</a>
+      ))}
+    </nav>
+  </div>
+</header>
+<script src="../scripts/navigation.js"></script>

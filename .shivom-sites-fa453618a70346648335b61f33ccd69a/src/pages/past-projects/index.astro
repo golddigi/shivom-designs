@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactPrompt from '../../components/ContactPrompt.astro';
+import PortfolioPreview from '../../components/PortfolioPreview.astro';
+import { getProjects } from '../../data/projects.js';
+
+const projects = await getProjects();
+---
+
+<BaseLayout title="Past Projects" description="Explore the interior design portfolio preview from Shivom Design Studio.">
+  <section class="site-container section-space">
+    <div class="listing-intro section-heading">
+      <h1 class="display page-title">Past projects</h1>
+      <p class="body-copy mt-4 max-w-[46ch]">Six concept interiors show how light, materials and layout can give a space its own character.</p>
+    </div>
+    <div class="project-grid">
+      {projects.map((project) => <PortfolioPreview {project} />)}
+    </div>
+  </section>
+  <ContactPrompt />
+</BaseLayout>

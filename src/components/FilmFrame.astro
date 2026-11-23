@@ -1,0 +1,40 @@
+---
+import StudioImage from './StudioImage.astro';
+import VideoTrigger from './VideoTrigger.astro';
+import { sitePath } from '../lib/paths.js';
+
+const { variant, media, film } = Astro.props;
+const opening = variant === 'opening';
+const local = Boolean(media.wide || media.narrow);
+const portraitOnly = Boolean(media.narrow && !media.wide);
+const label = opening ? 'Opening studio film' : 'Studio reel';
+---
+
+<div class:list={['film-frame', `film-${variant}`, { 'film-portrait-only': portraitOnly }]}>
+  <StudioImage name={film.image} alt="" shape="fill" eager={opening} sizes={opening ? '100vw' : '(max-width: 767px) 90vw, 1150px'} />
+  {media.poster && (
+    <div class="film-poster image-frame" data-drift>
+      <img src={sitePath(media.poster)} alt="" width="426" height="756" loading={opening ? 'eager' : 'lazy'} decoding="async" />
+    </div>
+  )}
+  {local && (
+    <video
+      muted
+      loop
+      playsinline
+      preload="none"
+      aria-hidden="true"
+      data-local-film
+      data-wide={media.wide ? sitePath(media.wide) : undefined}
+      data-narrow={media.narrow ? sitePath(media.narrow) : undefined}
+      data-breakpoint={opening ? '991' : '767'}
+    ></video>
+  )}
+  {local ? (
+    <button class="film-link film-control" type="button" aria-label={`Play ${label.toLowerCase()}`} data-local-toggle={label.toLowerCase()} hidden>
+      <span class="play-icon" aria-hidden="true"></span><span class="film-control-label">Play film</span>
+    </button>
+  ) : !opening && (
+    <div class="film-control"><VideoTrigger film={film} label="Play preview reel" /></div>
+  )}
+</div>

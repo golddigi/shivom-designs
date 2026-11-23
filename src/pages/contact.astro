@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import StudioImage from '../components/StudioImage.astro';
+import { contact, studioLinks } from '../data/studio.js';
+
+const enquirySubject = encodeURIComponent('Interior design project enquiry');
+const projectsLink = contact.projectsEmail ? `mailto:${contact.projectsEmail}?subject=${enquirySubject}` : '';
+const careersEmail = contact.careersEmail || contact.projectsEmail;
+const careersLink = careersEmail ? `mailto:${careersEmail}?subject=${encodeURIComponent('Career enquiry')}` : '';
+const phoneLink = contact.phone ? `tel:${contact.phone.replace(/[^+\d]/g, '')}` : '';
+---
+
+<BaseLayout title="Contact the Studio" description="Contact Shivom Design Studio for interior design projects and career enquiries.">
+  <section class="site-container contact-page">
+    <p class="contact-mobile-intro display">Get in touch</p>
+    <StudioImage name="dining" shape="contact" eager sizes="(max-width: 767px) 90vw, (max-width: 991px) 80vw, 1150px" />
+
+    <div class="contact-grid">
+      <div class="contact-title">
+        <h1 class="display page-title">Contact us</h1>
+        {studioLinks.length > 0 && (
+          <nav class="contact-socials" aria-label="Social and email">
+            {studioLinks.map(({ label, href }) => (
+              <a {href} aria-label={label} title={label}>
+                <span aria-hidden="true" class:list={{ 'instagram-icon': label === 'Instagram', 'email-icon': label === 'Email' }}>
+                  {label === 'LinkedIn' ? 'in' : ''}
+                </span>
+              </a>
+            ))}
+          </nav>
+        )}
+      </div>
+      <div class="contact-details">
+        <div class="enquiries">
+          <h2 class="eyebrow">Enquiries</h2>
+          <p><strong>Projects</strong> {projectsLink ? <>Email <a href={projectsLink}>{contact.projectsEmail}</a> with the subject “Interior design project enquiry”.</> : 'Project enquiry email coming soon.'}</p>
+          {careersLink && <p><strong>Careers</strong> Send a short introduction and portfolio to <a href={careersLink}>{careersEmail}</a>.</p>}
+        </div>
+
+        <div class="office-details">
+          <h2 class="eyebrow">Studio office</h2>
+          <dl>
+            <div><dt>Address</dt><dd>{contact.address || 'To be confirmed'}</dd></div>
+            <div><dt>Hours</dt><dd class="whitespace-pre-line">{contact.hours || 'To be confirmed'}</dd></div>
+            <div><dt>Phone</dt><dd>{phoneLink ? <a href={phoneLink}>{contact.phone}</a> : 'To be confirmed'}</dd></div>
+          </dl>
+        </div>
+
+        <div class="map-block" data-reveal>
+          {contact.mapEmbed ? (
+            <iframe class="map-frame" src={contact.mapEmbed} title="Map of the studio’s neighbourhood" loading="lazy" allowfullscreen></iframe>
+          ) : (
+            <div class="map-frame map-placeholder">
+              <span class="map-pin" aria-hidden="true"></span>
+              <p>Studio location coming soon.</p>
+            </div>
+          )}
+          {contact.directions && <a class="text-link mt-4" href={contact.directions}>Get directions</a>}
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

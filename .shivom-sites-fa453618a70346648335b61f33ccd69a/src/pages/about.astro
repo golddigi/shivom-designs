@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactPrompt from '../components/ContactPrompt.astro';
+import StudioImage from '../components/StudioImage.astro';
+import { sitePath } from '../lib/paths.js';
+---
+
+<BaseLayout title="About the Studio" description="The design approach behind Shivom Design Studio.">
+  <section class="site-container feature-grid about-intro section-space">
+    <div class="feature-copy">
+      <p class="eyebrow">Shivom Design Studio</p>
+      <h1 class="display page-title mt-4">Interiors made for everyday life.</h1>
+      <p class="body-copy mt-6">We begin with what happens in a space. Where does the morning light fall? Which objects do you reach for every day? Where do people naturally gather? These observations guide decisions about the layout, materials and finishes.</p>
+      <p class="body-copy mt-4">We work with a restrained palette that lets light, texture and the things you bring with you give each room its character.</p>
+      <a class="text-link mt-6" href={sitePath('past-projects/')}>Explore past projects</a>
+    </div>
+    <StudioImage name="gallery" shape="square" eager />
+  </section>
+  <ContactPrompt />
+</BaseLayout>

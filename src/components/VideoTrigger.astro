@@ -1,0 +1,13 @@
+---
+const { film, class: extraClass, label = 'Play film' } = Astro.props;
+---
+<a
+  class:list={['film-link', extraClass]}
+  href={`https://www.youtube.com/watch?v=${film.id}`}
+  data-film-id={film.id}
+  data-film-title={film.title}
+  data-film-credit={film.credit}
+>
+  <span class="play-icon" aria-hidden="true"></span>
+  <span>{label}</span>
+</a>

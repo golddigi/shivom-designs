@@ -1,0 +1,35 @@
+---
+import { sitePath } from '../lib/paths.js';
+import { contact, studioLinks } from '../data/studio.js';
+---
+
+<footer class="site-footer">
+  <div class="site-container footer-grid">
+    <div class="footer-identity">
+      <a class="wordmark footer-brand" href={sitePath()} aria-label="Shivom Design home">
+        <span>Shivom</span><small>Design Studio</small>
+      </a>
+      {contact.address && <address class="mt-4 not-italic">{contact.address}</address>}
+      {studioLinks.length > 0 && (
+        <nav class="footer-socials" aria-label="Social and email">
+          {studioLinks.map(({ label, href }) => <a href={href}>{label}</a>)}
+        </nav>
+      )}
+    </div>
+    <nav aria-label="Studio pages" class="footer-list">
+      <h2>Studio</h2>
+      <a href={sitePath()}>Home</a>
+      <a href={sitePath('about/')}>About the studio</a>
+      <a href={sitePath('contact/')}>Contact</a>
+    </nav>
+    <nav aria-label="Projects and journal" class="footer-list">
+      <h2>Explore</h2>
+      <a href={sitePath('past-projects/')}>Past projects</a>
+      <a href={sitePath('#journal')}>Studio journal</a>
+    </nav>
+  </div>
+  <div class="site-container footer-base">
+    <span>&copy; {new Date().getFullYear()} Shivom Design Studio</span>
+    <span>Shivom Design</span>
+  </div>
+</footer>

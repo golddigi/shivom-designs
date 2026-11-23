@@ -1,0 +1,190 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Carousel from '../components/Carousel.astro';
+import ContactPrompt from '../components/ContactPrompt.astro';
+import FilmFrame from '../components/FilmFrame.astro';
+import PortfolioPreview from '../components/PortfolioPreview.astro';
+import StudioImage from '../components/StudioImage.astro';
+import VideoDialog from '../components/VideoDialog.astro';
+import VideoTrigger from '../components/VideoTrigger.astro';
+import { getProjects } from '../data/projects.js';
+import { articles, awards, covers, faq, films, studioFilms, testimonials } from '../data/studio.js';
+import { sitePath } from '../lib/paths.js';
+
+const projects = await getProjects();
+const process = [
+  { name: 'Briefing', copy: 'We start with your routines, priorities and the things you want to feel at home around.' },
+  { name: 'Design', copy: 'Layout, light and materials come together through drawings, samples and conversations.' },
+  { name: 'Execution', copy: 'The design moves from the drawing board into the space, with details reviewed along the way.' },
+  { name: 'Handover', copy: 'We walk through the finished rooms together and share what you need to care for them.' },
+];
+---
+
+<BaseLayout>
+  <FilmFrame variant="opening" media={studioFilms.opening} film={films[0]} />
+  <section class="site-container intro-section text-center" aria-label="Our design approach">
+    <h1 class="display editorial-line">We design interiors around the way life happens in them.</h1>
+  </section>
+
+  <section class="site-container featured-projects" aria-labelledby="featured-heading">
+    <div class="section-heading text-center">
+      <h2 class="display" id="featured-heading">Featured projects</h2>
+    </div>
+    <div class="project-grid">
+      {projects.map((project) => <PortfolioPreview {project} />)}
+    </div>
+    <div class="mt-12 text-center">
+      <a class="text-link" href={sitePath('past-projects/')}>View all projects</a>
+    </div>
+  </section>
+
+  <section class="studio-feature section-space" aria-labelledby="studio-heading">
+    <div class="site-container feature-grid">
+      <StudioImage name="gallery" shape="square" />
+      <div class="feature-copy">
+        <p class="eyebrow">About Shivom Design</p>
+        <h2 class="display mt-4" id="studio-heading">The rooms we live in shape our days.</h2>
+        <p class="body-copy mt-5">We pay attention to the way sunlight moves through a room, how a material feels underfoot and what makes an everyday routine easier. Those details help a space feel familiar from the day you move in.</p>
+        <a class="text-link mt-6" href={sitePath('about/')}>Meet the studio</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="site-container section-space" aria-labelledby="reel-heading">
+    <div class="section-heading">
+      <h2 class="display max-w-[28ch]" id="reel-heading">A playroom designed for little explorers.</h2>
+    </div>
+    <FilmFrame variant="reel" media={studioFilms.reel} film={{ ...films[1], image: 'dining' }} />
+  </section>
+
+  <section class="site-container scale-section text-center" aria-label="Design at every scale">
+    <p class="display editorial-line">From the shape of a room to the grain of a single surface.</p>
+  </section>
+
+  <section class="site-container section-space" aria-labelledby="process-heading">
+    <div class="section-heading"><h2 class="display" id="process-heading">Our process</h2></div>
+    <ol class="process-grid">
+      {process.map(({ name, copy }, index) => (
+        <li>
+          <span class="step-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+          <h3 class="eyebrow">{name}</h3>
+          <p class="body-copy mt-3">{copy}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="comparison-section section-space" aria-labelledby="comparison-heading">
+    <div class="site-container text-center">
+      <div class="section-heading">
+        <h2 class="display" id="comparison-heading">A seamless experience</h2>
+        <p class="body-copy mx-auto mt-4 max-w-[56ch]" id="comparison-note">Move the divider to compare two material palettes for the same room.</p>
+      </div>
+      <div class="comparison" data-comparison>
+        <div class="comparison-frame" data-drift>
+          <picture>
+            <source media="(max-width: 600px)" srcset={sitePath('assets/interiors/hero-640.webp')} />
+            <img src={sitePath('assets/interiors/hero-1120.webp')} alt="Lounge with a warm material palette" loading="lazy" width="1120" height="630" />
+          </picture>
+          <picture class="comparison-layer">
+            <source media="(max-width: 600px)" srcset={sitePath('assets/interiors/hero-muted-640.webp')} />
+            <img src={sitePath('assets/interiors/hero-muted-1120.webp')} alt="The same lounge with a muted material palette" loading="lazy" width="1120" height="630" />
+          </picture>
+          <span class="comparison-tag comparison-before" aria-hidden="true">Muted</span>
+          <span class="comparison-tag comparison-after" aria-hidden="true">Warm</span>
+          <span class="comparison-divider" aria-hidden="true"><span>‹ ›</span></span>
+          <input class="comparison-input" type="range" min="0" max="100" value="50" aria-label="Percentage of muted image revealed" aria-describedby="comparison-note" data-comparison-input hidden />
+        </div>
+        <output class="comparison-output" data-comparison-output hidden>50% muted image revealed</output>
+      </div>
+      <a class="button mt-7" href={sitePath('past-projects/')}>Explore the projects</a>
+    </div>
+  </section>
+
+  {testimonials.length > 0 && (
+    <section class="site-container section-space text-center" aria-labelledby="testimonials-heading">
+      <div class="section-heading"><h2 class="display" id="testimonials-heading">Testimonials</h2></div>
+      <Carousel label="Testimonials" variant="quotes">
+        {testimonials.map(({ quote, author }) => <figure><blockquote>{quote}</blockquote><figcaption>{author}</figcaption></figure>)}
+      </Carousel>
+    </section>
+  )}
+
+  <section class="press-section section-space" aria-labelledby="press-heading">
+    <div class="site-container">
+      <div class="section-heading"><h2 class="display" id="press-heading">Press &amp; articles</h2></div>
+      <div class="press-group">
+        <h3 class="eyebrow mb-4">Video features</h3>
+        <Carousel label="Video features">
+          {films.map((film) => (
+            <article class="press-card">
+              <div class="press-image">
+                <StudioImage name={film.image} alt="" shape="press" sizes="(max-width: 600px) 85vw, 420px" />
+                <VideoTrigger {film} label="Play film" />
+              </div>
+              <h4 class="display">{film.title}</h4>
+              <p>{film.credit}</p>
+            </article>
+          ))}
+        </Carousel>
+      </div>
+      <div class="press-group">
+        <h3 class="eyebrow mb-4">Magazine cover studies</h3>
+        <Carousel label="Magazine covers" variant="covers">
+          {covers.map(({ title, image }) => (
+            <figure class="cover-card">
+              <StudioImage name={image} alt="" sizes="220px" />
+              <figcaption>{title}</figcaption>
+            </figure>
+          ))}
+        </Carousel>
+      </div>
+      <div class="press-group">
+        <h3 class="eyebrow mb-4">Articles</h3>
+        <ul class="press-articles" role="list">
+          {articles.map((article) => (
+            <li><a href={sitePath(`journal/${article.id}/`)}><span>{article.title}</span><span>{article.category}</span></a></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  {awards.length > 0 && (
+    <section class="site-container section-space" aria-labelledby="awards-heading">
+      <div class="section-heading"><h2 class="display" id="awards-heading">Awards</h2></div>
+      <Carousel label="Awards">
+        {awards.map(({ title, issuer, year }) => <article class="award-card"><h3 class="display">{title}</h3><p>{issuer} · {year}</p></article>)}
+      </Carousel>
+    </section>
+  )}
+
+  <section class="site-container section-space" id="journal" aria-labelledby="journal-heading">
+    <div class="section-heading"><h2 class="display" id="journal-heading">Latest from the journal</h2></div>
+    <div class="journal-grid">
+      {articles.map((article) => (
+        <article>
+          <a class="journal-card" href={sitePath(`journal/${article.id}/`)}>
+            <StudioImage name={article.image} alt="" shape="press" />
+            <p class="eyebrow mt-4">{article.category}</p>
+            <h3 class="display mt-2">{article.title}</h3>
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="faq-section section-space" aria-labelledby="faq-heading">
+    <div class="site-container faq-grid">
+      <h2 class="display" id="faq-heading">Frequently asked questions</h2>
+      <div>
+        {faq.map(({ question, answer }) => (
+          <details class="faq-item"><summary>{question}<span aria-hidden="true"></span></summary><p class="body-copy">{answer}</p></details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <ContactPrompt />
+  <VideoDialog />
+</BaseLayout>

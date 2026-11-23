@@ -1,0 +1,29 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+const { title, description = 'Shivom Design Studio. Considered interiors with a sense of place.', stickyHeader = false } = Astro.props;
+const pageTitle = title ? `${title} | Shivom Design` : 'Shivom Design Studio — Interior Design';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="description" content={description} />
+    <title>{pageTitle}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;family=Playfair+Display:ital,wght@0,400;0,500;1,400&amp;display=swap" />
+  </head>
+  <body class="flex min-h-dvh flex-col">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <Header sticky={stickyHeader} />
+    <main id="main-content" class="min-w-0 flex-1" tabindex="-1"><slot /></main>
+    <Footer />
+    <script src="../scripts/editorial.js"></script>
+  </body>
+</html>

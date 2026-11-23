@@ -1,0 +1,78 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactPrompt from '../../components/ContactPrompt.astro';
+import StudioImage from '../../components/StudioImage.astro';
+import { getProjects } from '../../data/projects.js';
+import { sitePath } from '../../lib/paths.js';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project, index) => ({
+    params: { slug: project.id },
+    props: { project, nextProject: projects[(index + 1) % projects.length] },
+  }));
+}
+
+const { project, nextProject } = Astro.props;
+const { data } = project;
+const { Content } = await render(project);
+const optional = [
+  { title: 'The Ask', copy: data.ask },
+  { title: 'The Result', copy: data.result },
+  { title: 'Testimonial', copy: data.testimonial },
+].filter(({ copy }) => copy);
+---
+
+<BaseLayout title={data.title} description={data.description} stickyHeader>
+  <article class="case-container">
+    <header class="case-intro">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href={sitePath()}>Home</a><span aria-hidden="true">/</span>
+        <a href={sitePath('past-projects/')}>Past projects</a><span aria-hidden="true">/</span>
+        <span aria-current="page">{data.title}</span>
+      </nav>
+      <h1 class="display case-title mt-5">{data.title}</h1>
+      <p class="case-subtitle mt-3">{data.description}</p>
+      <dl class="case-meta mt-6">
+        <div><dt>Category</dt><dd>{data.category}</dd></div>
+        <div><dt>Year</dt><dd>{data.year}</dd></div>
+        <div><dt>Location</dt><dd>{data.location}</dd></div>
+      </dl>
+    </header>
+
+    <StudioImage name={data.img} shape="project-hero" eager sizes="(max-width: 767px) 90vw, (max-width: 991px) 94vw, 1150px" />
+
+    <section class="case-space" aria-labelledby="space-heading">
+      <div>
+        <h2 class="display" id="space-heading">The Space</h2>
+        <p class="body-copy mt-4">{data.space}</p>
+      </div>
+      <div class="case-space-images">
+        {data.spaceImages.map((name) => <StudioImage {name} shape="gallery" sizes="(max-width: 767px) 90vw, (max-width: 991px) 45vw, 370px" />)}
+      </div>
+    </section>
+
+    <section class="case-journey" aria-labelledby="journey-heading">
+      <h2 class="display" id="journey-heading">The Journey</h2>
+      <div class="prose-copy body-copy mt-4"><Content /></div>
+    </section>
+
+    {optional.map(({ title, copy }) => (
+      <section class="case-journey"><h2 class="display">{title}</h2><p class="body-copy mt-4">{copy}</p></section>
+    ))}
+
+    <section class="case-gallery" aria-labelledby="gallery-heading">
+      <h2 class="display mb-7" id="gallery-heading">Interior study gallery</h2>
+      <div class="case-gallery-grid">
+        {data.gallery.map((name) => <StudioImage {name} shape="gallery" sizes="(max-width: 767px) 90vw, (max-width: 991px) 45vw, 370px" />)}
+      </div>
+    </section>
+
+    <div class="case-next">
+      <a class="text-link" href={sitePath('past-projects/')}>All projects</a>
+      <a class="text-link" href={sitePath(`past-projects/${nextProject.id}/`)}>Next project: {nextProject.data.title}</a>
+    </div>
+  </article>
+  <ContactPrompt />
+</BaseLayout>

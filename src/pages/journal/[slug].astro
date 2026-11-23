@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import StudioImage from '../../components/StudioImage.astro';
+import { articles } from '../../data/studio.js';
+import { sitePath } from '../../lib/paths.js';
+
+export function getStaticPaths() {
+  return articles.map((article) => ({ params: { slug: article.id }, props: { article } }));
+}
+
+const { article } = Astro.props;
+---
+
+<BaseLayout title={article.title} description={article.summary}>
+  <article class="site-container journal-article section-space">
+    <p class="eyebrow">{article.category}</p>
+    <h1 class="display page-title mt-4">{article.title}</h1>
+    <p class="body-copy mt-4 mb-8">{article.summary}</p>
+    <StudioImage name={article.image} shape="press" eager />
+    <div class="prose-copy body-copy my-8">{article.paragraphs.map((paragraph) => <p>{paragraph}</p>)}</div>
+    <a class="text-link" href={sitePath('#journal-heading')}>Back to the journal</a>
+  </article>
+</BaseLayout>

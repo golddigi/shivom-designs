@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { sitePath } from '../lib/paths.js';
+---
+<BaseLayout title="Page not found">
+  <section class="site-container section-space">
+    <h1 class="display page-title">Page not found</h1>
+    <a class="text-link mt-5" href={sitePath()}>Return home</a>
+  </section>
+</BaseLayout>
