@@ -44,3 +44,8 @@ Thumbs.db
 # Personal VS Code settings
 .vscode/*
 !.vscode/extensions.json
+
+# Design notes
+design.md
+*-design.md
+* design.md
